@@ -19,7 +19,7 @@ selected_car = tk.StringVar()
 # kod do bt
 def buttonclick():
     paramdata = baza.loc[(baza["naped"] == drivevalue.get()) & (baza["silnik"] == enginevalue.get())
-                         & (baza["nadwozie"] == bodyvalue.get())]
+                         & (baza["nadwozie"] == bodyvalue.get())].sample(n=1)
     if len(drivevalue.get()) == 0 or len(enginevalue.get()) == 0 or len(bodyvalue.get()) == 0:
         carlabel.config(text="Nie podano parametrów!")
     elif paramdata.empty:
