@@ -1,3 +1,11 @@
-from bing_image_downloader import downloader
+def convertTuple(tup):
+    # initialize an empty string
+    str = ''
+    for item in tup:
+        str = str + " " + item
+    return str
 
-downloader.download("borzoi", limit=1, output_dir='images', adult_filter_off=True, force_replace=False, timeout=60, verbose=True)
+# Driver code
+tuple = ('g', 'e', 'e', 'k', 's')
+str = convertTuple(tuple)
+print(str)

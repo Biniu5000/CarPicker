@@ -1,8 +1,10 @@
+import time
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 import pandas as pd
 from bing_image_downloader import downloader
+from PIL import ImageTk, Image
 
 
 baza = pd.read_csv("baza.csv")
@@ -28,10 +30,16 @@ def buttonclick():
         carlabel.config(text="Nie znaleziono szukanego auta!")
     else:
         randcar = paramdata.sample(n=1)  # zwraca 1 losowo wybrany wiersz
-        carlabel.config(text=(randcar["marka"].item(), randcar["model"].item(), randcar["rocznik"].item()))
-        # downloader.download("borzoi", limit=1, output_dir='images', adult_filter_off=True, force_replace=False,
-                            #timeout=60, verbose=True)
-        # img.config(file='images/borzoi/Image_1.jpg')
+        randcar_tuple = randcar["marka"].item(), randcar["model"].item(), randcar["rocznik"].item()
+        randcar_text = " ".join(map(str, randcar_tuple))
+        carlabel.config(text=randcar_text)
+        downloader.download(randcar_text, limit=1, output_dir='images', adult_filter_off=True, force_replace=False,
+                            timeout=60, verbose=True)
+        time.sleep(10)
+        path = f'images/{randcar_text}/Image_1.jpg'
+        img2 = ImageTk.PhotoImage(Image.open(path).resize((640, 360)))
+        panel.configure(image=img2)
+        panel.image = img2
 
 
 # create a combobox
@@ -60,11 +68,9 @@ body.grid(column=2, row=2)
 bt.grid(row=2, column=3)
 
 # zdjęcie
-img = PhotoImage(file='images/kar2.gif')
-Label(
-    root,
-    image=img
-).grid(row=3, column=0)
+img = ImageTk.PhotoImage(Image.open('images/kar2.gif'))
+panel = tk.Label(root, image=img)
+panel.grid(row=3, column=0)
 
 carlabel.grid(row=4, column=0)
 adios.grid(row=4, column=1)
