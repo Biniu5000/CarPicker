@@ -5,10 +5,12 @@ from tkinter import *
 import pandas as pd
 from bing_image_downloader import downloader
 from PIL import ImageTk, Image
+import shutil
 
 
 baza = pd.read_csv("baza.csv")
 root = tk.Tk()
+# root.geometry("1400x900")
 root.title('Porównywarka aut')
 
 # labels
@@ -28,6 +30,9 @@ def buttonclick():
         carlabel.config(text="Nie podano parametrów!")
     elif paramdata.empty:
         carlabel.config(text="Nie znaleziono szukanego auta!")
+        img3 = ImageTk.PhotoImage(Image.open('images/shrug-emoji.gif'))
+        panel.configure(image=img3)
+        panel.image = img3
     else:
         randcar = paramdata.sample(n=1)  # zwraca 1 losowo wybrany wiersz
         randcar_tuple = randcar["marka"].item(), randcar["model"].item(), randcar["rocznik"].item()
@@ -42,12 +47,17 @@ def buttonclick():
         panel.image = img2
 
 
+def adios():
+    root.destroy()
+    # shutil.rmtree(f'/images/{randcar_text}')
+
+
 # create a combobox
 drive = ttk.Combobox(root, textvariable=selected_car)
 engine = ttk.Combobox(root)
 body = ttk.Combobox(root)
 bt = Button(text="Generuj", command=buttonclick)
-adios = Button(text="Wyjście", command=root.destroy)
+exitbt = Button(text="Wyjście", command=adios)
 
 drivevalue = tk.StringVar()  # potrzebne do ustalenia wartości comboboxa
 enginevalue = tk.StringVar()
@@ -58,22 +68,22 @@ engine.config(state="readonly", values=('Spalinowy', 'Elektryczny'), textvariabl
 body.config(state="readonly", values=('Sedan', 'Coupe', 'SUV', 'Pickup'), textvariable=bodyvalue)
 
 # place the widget
-header.grid(row=0, column=0)
+header.grid(row=0, column=1)
 label1.grid(column=0, row=1)
 label2.grid(column=1, row=1)
 label3.grid(column=2, row=1)
 drive.grid(column=0, row=2)
 engine.grid(column=1, row=2)
 body.grid(column=2, row=2)
-bt.grid(row=2, column=3)
+bt.grid(row=2, column=3, sticky="e")
 
 # zdjęcie
-img = ImageTk.PhotoImage(Image.open('images/kar2.gif'))
+img = ImageTk.PhotoImage(Image.open('images/kar.png'))
 panel = tk.Label(root, image=img)
-panel.grid(row=3, column=0)
+panel.grid(row=3, column=1)
 
-carlabel.grid(row=4, column=0)
-adios.grid(row=4, column=1)
+carlabel.grid(row=4, column=1)
+exitbt.grid(row=4, column=3, sticky="e")
 
 # drive.set("Typ napędu")
 # engine.set("Rodzaj silnika")
