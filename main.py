@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 import pandas as pd
+from bing_image_downloader import downloader
+
 
 baza = pd.read_csv("baza.csv")
 root = tk.Tk()
@@ -19,13 +21,17 @@ selected_car = tk.StringVar()
 # kod do bt
 def buttonclick():
     paramdata = baza.loc[(baza["naped"] == drivevalue.get()) & (baza["silnik"] == enginevalue.get())
-                         & (baza["nadwozie"] == bodyvalue.get())].sample(n=1)
+                         & (baza["nadwozie"] == bodyvalue.get())]
     if len(drivevalue.get()) == 0 or len(enginevalue.get()) == 0 or len(bodyvalue.get()) == 0:
         carlabel.config(text="Nie podano parametrów!")
     elif paramdata.empty:
         carlabel.config(text="Nie znaleziono szukanego auta!")
     else:
-        carlabel.config(text=paramdata)
+        randcar = paramdata.sample(n=1)  # zwraca 1 losowo wybrany wiersz
+        carlabel.config(text=(randcar["marka"].item(), randcar["model"].item(), randcar["rocznik"].item()))
+        # downloader.download("borzoi", limit=1, output_dir='images', adult_filter_off=True, force_replace=False,
+                            #timeout=60, verbose=True)
+        # img.config(file='images/borzoi/Image_1.jpg')
 
 
 # create a combobox
@@ -63,7 +69,7 @@ Label(
 carlabel.grid(row=4, column=0)
 adios.grid(row=4, column=1)
 
-#drive.set("Typ napędu")
-#engine.set("Rodzaj silnika")
-#body.set("Typ nadwozia")
+# drive.set("Typ napędu")
+# engine.set("Rodzaj silnika")
+# body.set("Typ nadwozia")
 root.mainloop()
