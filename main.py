@@ -6,6 +6,7 @@ import pandas as pd
 from bing_image_downloader import downloader
 from PIL import ImageTk, Image
 import shutil
+import tempfile
 
 
 baza = pd.read_csv("baza.csv")
@@ -38,13 +39,14 @@ def buttonclick():
         randcar_tuple = randcar["marka"].item(), randcar["model"].item(), randcar["rocznik"].item()
         randcar_text = " ".join(map(str, randcar_tuple))
         carlabel.config(text=randcar_text)
-        downloader.download(randcar_text, limit=1, output_dir='images', adult_filter_off=True, force_replace=False,
-                            timeout=60, verbose=True)
-        time.sleep(10)
-        path = f'images/{randcar_text}/Image_1.jpg'
-        img2 = ImageTk.PhotoImage(Image.open(path).resize((640, 360)))
-        panel.configure(image=img2)
-        panel.image = img2
+        with tempfile.TemporaryDirectory(dir='images/') as tmpdir:
+            downloader.download(randcar_text, limit=1, output_dir=f'images/{tmpdir}', adult_filter_off=True, force_replace=False,
+                                timeout=60, verbose=True)
+            time.sleep(10)
+            path = f'images/{tmpdir}/{randcar_text}/Image_1.jpg'
+            img2 = ImageTk.PhotoImage(Image.open(path).resize((640, 360)))
+            panel.configure(image=img2)
+            panel.image = img2
 
 
 def adios():
@@ -83,8 +85,16 @@ panel = tk.Label(root, image=img)
 panel.grid(row=3, column=1)
 
 carlabel.grid(row=4, column=1)
-exitbt.grid(row=4, column=3, sticky="e")
+exitbt.grid(row=5, column=3, sticky="e")
 
+# dodawanie auta do bazy
+textbox = Text(root, height=1, width=5, bg="light yellow")
+addbrand = textbox.grid(column=0, row=4)
+#addmodel = textbox.grid(column=1, row=4)
+# addyr = textbox.grid(column=2, row=4)
+# adddrv = textbox.grid(column=3, row=4)
+# addengine = textbox.grid(column=4, row=4)
+# addbody = textbox.grid(column=5, row=4)
 # drive.set("Typ napędu")
 # engine.set("Rodzaj silnika")
 # body.set("Typ nadwozia")
