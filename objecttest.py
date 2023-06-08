@@ -11,6 +11,9 @@ import tempfile
 class MainFrame(ttk.Frame):
     def __init__(self, container):
         super().__init__(container)
+        self.__create_widgets()
+
+    def __create_widgets(self):
         header = ttk.Label(text="Porównywarka aut", background='green', foreground='white',
                            font=("Times New Roman", 30))
         label1 = ttk.Label(text="Wybierz typ napędu:")
@@ -80,14 +83,43 @@ class MainFrame(ttk.Frame):
         self.quit()
 
 
+class AddCar(ttk.Frame):
+    def __init__(self, container):
+        super().__init__(container)
+        self.__create_widgets()
+
+    def __create_widgets(self):
+        addbrand = ttk.Entry(self)
+        addmodel = ttk.Entry(self)
+        addyr = ttk.Entry(self)
+        adddrv = ttk.Entry(self)
+        addengine = ttk.Entry(self)
+        addbody = ttk.Entry(self)
+        addbrand.grid(column=0, row=5)
+        addmodel.grid(column=1, row=5)
+        addyr.grid(column=2, row=5)
+        adddrv.grid(column=3, row=5)
+        addengine.grid(column=4, row=5)
+        addbody.grid(column=5, row=5)
+
+
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
         # root.geometry("1400x900")
         self.title('Porównywarka aut')
+        self.resizable(0, 0)
+        self.attributes('-toolwindow', True)
+        self.__create_widgets()
+
+    def __create_widgets(self):
+        main_frame = MainFrame(self)
+        main_frame.grid(column=0, row=0)
+
+        addcar_frame = AddCar(self)
+        addcar_frame.grid(column=1, row=6)
 
 
 if __name__ == "__main__":
     app = App()
-    frame = MainFrame(app)
     app.mainloop()
