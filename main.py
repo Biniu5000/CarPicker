@@ -149,14 +149,16 @@ class AddCar(ttk.Frame):
         self.body = bodyvalue
 
     def addbuttonclick(self):
-        rekord = [self.brand.get(), self.model.get(), self.year.get(), self.drive.get(), self.engine.get(),
-                  self.body.get()]
-        testrekord = ["Ford", "Focus RS", 2017, "RWD", "Spalinowy", "Coupe"]
-        with open('baza.csv', 'a') as f_object:
-            writer_object = writer(f_object)
-            writer_object.writerow(rekord)
-            f_object.close()
-        self.addcarl.config(text="Pomyślnie dodano auto.")
+        try:
+            rekord = [self.brand.get(), self.model.get(), int(self.year.get()), self.drive.get(), self.engine.get(),
+                      self.body.get()]
+            with open('baza.csv', 'a') as f_object:
+                writer_object = writer(f_object)
+                writer_object.writerow(rekord)
+                f_object.close()
+            self.addcarl.config(text="Pomyślnie dodano auto.")
+        except ValueError:
+            self.addcarl.config(text="Nie udało się dodać auta, sprawdź składnię.")
 
 
 class App(tk.Tk):
