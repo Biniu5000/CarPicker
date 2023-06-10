@@ -76,13 +76,16 @@ class MainFrame(ttk.Frame):
             randcar_text = " ".join(map(str, randcar_tuple))
             self.carlabel.config(text=randcar_text)
             with tempfile.TemporaryDirectory(dir='images/') as tmpdir:
-                downloader.download(randcar_text, limit=1, output_dir=f'images/{tmpdir}', adult_filter_off=True,
-                                    force_replace=False, timeout=60, verbose=True)
-                time.sleep(10)
-                path = f'images/{tmpdir}/{randcar_text}/Image_1.jpg'
-                img2 = ImageTk.PhotoImage(Image.open(path).resize((640, 360)))
-                self.panel.configure(image=img2)
-                self.panel.image = img2
+                try:
+                    downloader.download(randcar_text, limit=1, output_dir=f'{tmpdir}', adult_filter_off=True,
+                                        force_replace=False, timeout=60, verbose=True)
+                    time.sleep(7)
+                    path = f'{tmpdir}/{randcar_text}/Image_1.jpg'
+                    img2 = ImageTk.PhotoImage(Image.open(path).resize((854, 480)))
+                    self.panel.configure(image=img2)
+                    self.panel.image = img2
+                except FileNotFoundError:
+                    self.carlabel.config(text="Nie udało się pobrać zdjęcia, sprawdź łącze internetowe.")
 
     def adios(self):
         self.quit()
@@ -164,7 +167,7 @@ class AddCar(ttk.Frame):
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        # root.geometry("1400x900")
+        # self.geometry("1610x900")
         self.title('Porównywarka aut')
         # self.resizable(0, 0)
         # self.attributes('-toolwindow', True)
