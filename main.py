@@ -12,16 +12,21 @@ from csv import writer
 class MainFrame(ttk.Frame):
     def __init__(self, container):
         super().__init__(container)
+        self.headers()
         self.__create_labels()
         self.__create_widgets()
 
-    def __create_labels(self):
+    def headers(self):
         header = ttk.Label(text="Porównywarka aut", background='green', foreground='white',
                            font=("Times New Roman", 30))
+        header.grid(row=0, column=1)
+
+
+    def __create_labels(self):
+
         label1 = ttk.Label(text="Wybierz typ napędu:")
         label2 = ttk.Label(text="Wybierz silnik:")
         label3 = ttk.Label(text="Wybierz nadwozie:")
-        header.grid(row=0, column=1)
         label1.grid(column=0, row=1)
         label2.grid(column=1, row=1)
         label3.grid(column=2, row=1)
@@ -94,21 +99,25 @@ class MainFrame(ttk.Frame):
 class AddCar(ttk.Frame):
     def __init__(self, container):
         super().__init__(container)
+        self.headers()
         self.__create_labels()
         self.__create_widgets()
 
-    def __create_labels(self):
+    def headers(self):
         addl = ttk.Label(self, text="Dodawanie aut do bazy:", background='green', foreground='white', font=("Times "
                                                                                                             "New "
                                                                                                             "Roman",
                                                                                                             16))
+        addl.grid(column=3, row=5)
+
+
+    def __create_labels(self):
         brandl = ttk.Label(self, text="Marka:")
         modell = ttk.Label(self, text="Model:")
         yrl = ttk.Label(self, text="Rocznik:")
         drvl = ttk.Label(self, text="Napęd:")
         enginel = ttk.Label(self, text="Silnik:")
         bodyl = ttk.Label(self, text="Nadwozie:")
-        addl.grid(column=0, row=5)
         brandl.grid(column=0, row=6)
         modell.grid(column=1, row=6)
         yrl.grid(column=2, row=6)
@@ -169,10 +178,17 @@ class App(tk.Tk):
         super().__init__()
         # self.geometry("1610x900")
         self.title('Porównywarka aut')
-        # self.resizable(0, 0)
-        # self.attributes('-toolwindow', True)
+        self.resizable(0, 0)
+        self.attributes('-toolwindow', True)
         self.__create_labels()
         self.__create_widgets()
+
+    def headers(self):
+        main_frame = MainFrame(self)
+        main_frame.grid(column=0, row=0)
+
+        addcar_frame = AddCar(self)
+        addcar_frame.grid(column=1, row=6)
 
     def __create_labels(self):
         main_frame = MainFrame(self)
