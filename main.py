@@ -179,7 +179,7 @@ class App(tk.Tk):
         # self.geometry("1610x900")
         self.title('Porównywarka aut')
         self.resizable(0, 0)
-        self.attributes('-toolwindow', True)
+        # self.attributes('-toolwindow', True)
         self.__create_labels()
         self.__create_widgets()
 
